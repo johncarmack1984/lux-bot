@@ -7,6 +7,20 @@ struct Data {} // User data, which is stored and accessible in all command invoc
 type Error = Box<dyn std::error::Error + Send + Sync>;
 type Context<'a> = poise::Context<'a, Data, Error>;
 
+#[poise::command(slash_command)]
+async fn set_buffer(ctx: Context<'_>) -> Result<(), Error> {
+    // let tunnel_domain = secret_store
+    //     .get("NGROK_TUNNEL_DOMAIN")
+    //     .context("'NGROK_TUNNEL_DOMAIN' was not found")
+    //     .unwrap();
+    // let tunnel_domain = format!("https://{}", tunnel_domain);
+
+    let tunnel_domain = "https://doe-smooth-seemingly.ngrok-free.app";
+
+    ctx.say(tunnel_domain).await?;
+    Ok(())
+}
+
 /// Responds with "world!"
 #[poise::command(slash_command)]
 async fn hello(ctx: Context<'_>) -> Result<(), Error> {
@@ -23,7 +37,7 @@ async fn main(#[shuttle_runtime::Secrets] secret_store: SecretStore) -> ShuttleS
 
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![hello()],
+            commands: vec![hello(), set_buffer()],
             ..Default::default()
         })
         .setup(|ctx, _ready, framework| {
